@@ -95,6 +95,7 @@ socket.use((sc, next) => {
     console.log(roomId, id, myname);
     
     console.log(userData.organizations)
+    console.log(userData)
     c.join(roomId);
     socket.to(roomId).emit("user-connected", id, myname);
 
