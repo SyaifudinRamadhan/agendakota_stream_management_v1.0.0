@@ -108,6 +108,27 @@ module.exports = {
       });
     }
   },
+  loginUserWithToken(req, res) {
+    if (req.body.credential) {
+      console.log(req.body.credential);
+      auth
+        .loginUserWithGoogle(req.body.credential, true)
+        .then((result) => {
+          if (result.status == 200) {
+            res.status(result.status).json(result.data);
+          } else {
+            res.status(result.status).json({ errors: result.msg });
+          }
+        })
+        .catch((err) => {
+          return callbackFailed2(err, res);
+        });
+    } else {
+      res.status(404).json({
+        errors: "Credential token is blank or not found",
+      });
+    }
+  },
   authStream(req, res) {
     console.log(
       req.name,

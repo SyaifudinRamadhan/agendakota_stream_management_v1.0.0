@@ -34,6 +34,7 @@ apiRouter.use(express.static(path.join(__dirname, "../bin/public")));
 
 apiRouter.post("/api/v1/login", controllers.api.v1.auth.loginUser);
 apiRouter.post('/api/v1/login-google', controllers.api.v1.auth.loginUserWithGoogle);
+apiRouter.post('/api/v1/login-token', controllers.api.v1.auth.loginUserWithToken);
 apiRouter.get("/api/v1/get-stream-key-session/:sessionId", controllers.midd.auth.isLogin, controllers.api.v1.auth.getStreamKey);
 apiRouter.get("/api/v1/get-stream-key-purchase/:purchaseId", controllers.midd.auth.isLogin, controllers.api.v1.auth.getStreamKey);
 // Route callback stream confirm dari nginx
