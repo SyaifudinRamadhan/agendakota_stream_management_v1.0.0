@@ -225,7 +225,7 @@ module.exports = {
       };
     }
   },
-  async loginUserWithGoogle(googleToken) {
+  async loginUserWithGoogle(googleToken, tokenAuth = false) {
     // console.log(googleToken, email);
     // let tokenDc = jwtDecode(googleToken)
     // // console.log(tokenDc);
@@ -235,19 +235,36 @@ module.exports = {
         algorithms: process.env.JWT_ALG,
       });
       console.log(tokenDc, tokenDc.email);
-      let user = await userRepo.findOne(
-        { google_id: tokenDc.g_id, email: tokenDc.email },
-        [
-          {
-            model: models.Organization,
-            as: "organizations",
-          },
-          {
-            model: models.OrganizationTeam,
-            as: "teamOrganizations",
-          },
-        ]
-      );
+      let user;
+      if(tokenAuth){
+        user = await userRepo.findOne(
+          { token: tokenDc.token, email: tokenDc.email },
+          [
+            {
+              model: models.Organization,
+              as: "organizations",
+            },
+            {
+              model: models.OrganizationTeam,
+              as: "teamOrganizations",
+            },
+          ]
+        );
+      }else{
+        user = await userRepo.findOne(
+          { google_id: tokenDc.g_id, email: tokenDc.email },
+          [
+            {
+              model: models.Organization,
+              as: "organizations",
+            },
+            {
+              model: models.OrganizationTeam,
+              as: "teamOrganizations",
+            },
+          ]
+        );
+      }
 
       if (user === null) {
         return {
