@@ -339,7 +339,7 @@ module.exports = {
         return resOrgAuth;
       }
 
-      let streamKeyMatch = streamKeyRepo.findOne(
+      let streamKeyMatch = await streamKeyRepo.findOne(
         {
           session_id: session.id,
           stream_key: streamKey,
