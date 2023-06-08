@@ -347,7 +347,11 @@ module.exports = {
         undefined
       );
 
-      if (streamKeyMatch == null) {
+      console.log(streamKeyMatch);
+      console.log(session.id);
+      console.log(streamKey);
+
+      if (!streamKeyMatch) {
         return {
           status: 404,
           msg: `Stream Key not found`,
