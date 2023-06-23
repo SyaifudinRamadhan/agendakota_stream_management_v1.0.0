@@ -142,7 +142,7 @@ module.exports = {
     let email = req.query.email;
     let pass = req.query.password;
     let sessionId = req.query.session;
-    let filepath = "/node_server/stream-management/bin/public/streams";
+    let filepath = "/var/www/agendakota_stream_management_v1.0.0/bin/public/streams";
 
     const callbackStream = (result) => {
       streamControl(req, res, result, sessionId, filepath);

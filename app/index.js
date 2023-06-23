@@ -93,6 +93,9 @@ socket.use((sc, next) => {
 
   c.on("join-room", (roomId, id, myname, userData) => {
     console.log(roomId, id, myname);
+    
+    console.log(userData.organizations)
+    console.log(userData)
     c.join(roomId);
     socket.to(roomId).emit("user-connected", id, myname);
 
@@ -116,6 +119,8 @@ socket.use((sc, next) => {
 
     c.on('share-universal-media', (username) => {
       midd.auth.isOrganizer_webrtc(userData, roomId).then(res => {
+        console.log(res)
+        console.log('--------------------- share universal media -----------------')
         if(res.status === 200){
           socket.to(roomId).emit('call-share-universal-media', username);
         }
@@ -146,6 +151,9 @@ socket.use((sc, next) => {
 
     c.on('command-pinning', (idTarget, idHost) => {
       midd.auth.isOrganizer_webrtc(userData, roomId).then(res => {
+        console.log(res)
+        console.log(userData.organizations)
+        console.log('--------------------- command pinning -----------------')
         if(res.status === 200){
           socket.to(roomId).emit('pinning-request', idTarget, idHost)
         }
