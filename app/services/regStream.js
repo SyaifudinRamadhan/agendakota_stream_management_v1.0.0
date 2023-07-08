@@ -80,7 +80,7 @@ module.exports = {
       let date = new Date();
       let streamKey = makeid(7) + "_" + date.getTime();
 
-      if(authState.session.url === "webrtc-video-conference"){
+      if(authState.session.link === "webrtc-video-conference"){
         streamKey = "webrtc-video-conference-" + streamKey;
       }
 
