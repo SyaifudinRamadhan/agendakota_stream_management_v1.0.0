@@ -332,24 +332,14 @@ module.exports = {
   async authAccessOrganizer(req, streamKey, sessionId) {
     try {
       let user = req.user;
-      let resOrgAuth = await orgAuth(user, sessionId);
-      let session = resOrgAuth.session;
-
-      if (resOrgAuth.status !== 200) {
-        return resOrgAuth;
-      }
 
       let streamKeyMatch = await streamKeyRepo.findOne(
         {
-          session_id: session.id,
+          session_id: sessionId,
           stream_key: streamKey,
         },
         undefined
       );
-
-      console.log(streamKeyMatch);
-      console.log(session.id);
-      console.log(streamKey);
 
       if (!streamKeyMatch) {
         return {
@@ -358,10 +348,28 @@ module.exports = {
         };
       }
 
-      return {
-        status: 200,
-        msg: "Session ID and stream key is match",
-      };
+      return await orgAuth(user, sessionId);
+      // let session = resOrgAuth.session;
+
+      // let streamKeyMatch = await streamKeyRepo.findOne(
+      //   {
+      //     session_id: session.id,
+      //     stream_key: streamKey,
+      //   },
+      //   undefined
+      // );
+
+      // if (!streamKeyMatch) {
+      //   return {
+      //     status: 404,
+      //     msg: `Stream Key not found`,
+      //   };
+      // }
+
+      // return {
+      //   status: 200,
+      //   msg: "Session ID and stream key is match",
+      // };
     } catch (error) {
       console.log(error);
       return {
@@ -372,42 +380,50 @@ module.exports = {
   },
   async authAccessOrganizer_webrtc(user, roomId){
     try {
-      let session = await sessionRepo.findOne({
-        link: `webrtc-video-conference-${roomId}`
-      }, undefined)
-      if(!session){
-        return {
-          status: 404,
-          msg: "room id not found"
-        }
-      }
-      let event = await eventRepo.findOne(session.event_id)
-      let isFIndOrgId = false
-      user.organizations.forEach(org => {
-        if(org.id === event.organizer_id){
-          isFIndOrgId = true
-        }
-      });
-      if(isFIndOrgId === false){
-        user.teamOrganizations.forEach(org => {
-          if(org.id === event.organizer_id){
-            isFIndOrgId = true
-          }
-        })
-      }
+      // let session = await sessionRepo.findOne({
+      //   link: `webrtc-video-conference-${roomId}`
+      // }, undefined)
+      // if(!session){
+      //   return {
+      //     status: 404,
+      //     msg: "room id not found"
+      //   }
+      // }
+      // let event = await eventRepo.findOne(session.event_id)
+      // let isFIndOrgId = false
+      // user.organizations.forEach(org => {
+      //   if(org.id === event.organizer_id){
+      //     isFIndOrgId = true
+      //   }
+      // });
+      // if(isFIndOrgId === false){
+      //   user.teamOrganizations.forEach(org => {
+      //     if(org.id === event.organizer_id){
+      //       isFIndOrgId = true
+      //     }
+      //   })
+      // }
 
-      if(isFIndOrgId === false){
-        return {
-          status: 403,
-          msg: "user is not organizer or team"
-        }
-      }else{
-        return {
-          status: 200,
-          msg: "success",
-          session, event
-        }
-      }
+      // if(isFIndOrgId === false){
+      //   return {
+      //     status: 403,
+      //     msg: "user is not organizer or team"
+      //   }
+      // }else{
+      //   return {
+      //     status: 200,
+      //     msg: "success",
+      //     session, event
+      //   }
+      // }
+      let streamKey = await streamKeyRepo.findOne(
+        {
+          stream_key: 'webrtc-video-conference-'+roomId,
+        },
+        undefined
+      );
+      return await orgAuth(user, streamKey.session_id);
+      
     } catch (error) {
       console.log(error);
       return {

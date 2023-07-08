@@ -57,6 +57,7 @@ async function authCheck(user, sessionId) {
     }
 
     return {
+      session,
       status: 200,
     };
   } catch (error) {
@@ -78,6 +79,10 @@ module.exports = {
 
       let date = new Date();
       let streamKey = makeid(7) + "_" + date.getTime();
+
+      if(authState.session.url === "webrtc-video-conference"){
+        streamKey = "webrtc-video-conference-" + streamKey;
+      }
 
       let streamKeys = await streamKeyRepo.findBySession(sessionId, undefined)
 

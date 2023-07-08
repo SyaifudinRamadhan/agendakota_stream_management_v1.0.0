@@ -15,7 +15,7 @@ module.exports = {
     },
 
     async timeStream_v2(roomId){
-        let res = await timeStrSvc.timeStreaming({roomId: roomId})
+        let res = await timeStrSvc.timeStreaming({streamKey: roomId})
         return res
     }
 }

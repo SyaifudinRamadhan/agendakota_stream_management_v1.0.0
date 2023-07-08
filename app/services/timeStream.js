@@ -2,17 +2,10 @@ const sessionRepo = require("../repositories/session");
 const streamKeyRepo = require("../repositories/streamKey");
 
 module.exports = {
-  async timeStreaming({ roomId, streamKey, sessionId }) {
+  async timeStreaming({streamKey, sessionId}) {
     try {
       let session;
-      if (roomId) {
-        session = await sessionRepo.findOne(
-          {
-            link: `webrtc-video-conference-${roomId}`,
-          },
-          undefined
-        );
-      } else if(sessionId){
+      if(sessionId){
         session = await sessionRepo.findOne(
             {
               id: sessionId,
@@ -28,10 +21,18 @@ module.exports = {
         );
 
         if (!stream) {
-          return {
-            status: 404,
-            msg: "stream key not found",
-          };
+          stream = await streamKeyRepo.findOne(
+            {
+              stream_key: 'webrtc-video-conference-'+streamKey,
+            },
+            undefined
+          );
+          if(!stream){
+            return {
+              status: 404,
+              msg: "stream key not found",
+            };
+          }
         }
 
         session = await sessionRepo.findOne(
