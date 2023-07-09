@@ -1,6 +1,8 @@
 const sessionRepo = require("../repositories/session");
 const streamKeyRepo = require("../repositories/streamKey");
 
+process.env.TZ = 'Asia/Bangkok';
+
 module.exports = {
   async timeStreaming({streamKey, sessionId}) {
     try {
