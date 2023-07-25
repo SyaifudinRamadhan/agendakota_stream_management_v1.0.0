@@ -5,5 +5,5 @@ Tata cara setup & running (hanya untuk OS Ubuntu):
 4. Jalankan npm install -g sequelize-cli
 5. Masuk ke directori repo ini
 6. Jalankan sequelize db migrate
-7. install pm2 "npm install pm2"
+7. install pm2 "npm install -g pm2"
 8. Jalankan pm2 start ./bin/www
